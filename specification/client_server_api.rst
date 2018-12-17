@@ -611,6 +611,7 @@ This specification defines the following auth types:
  - ``m.login.oauth2``
  - ``m.login.email.identity``
  - ``m.login.token``
+ - ``m.login.userowned``
  - ``m.login.dummy``
 
 Password-based
@@ -745,6 +746,30 @@ OAuth2 Allow/Deny prompt. Hitting 'Allow' redirects to the ``redirect URI`` with
 the auth code. Homeservers can choose any path for the ``redirect URI``. Once
 the OAuth flow has completed, the client retries the request with the session
 only, as above.
+
+
+User owned identity
+<<<<<<<<<<<<<<<<<<<
+:Type:
+  ``m.login.userowned``
+:Description:
+  The client submits a login token containing a user-owned identity
+
+To use this authentication type, clients should submit an auth dict as follows:
+
+.. code:: json
+
+  {
+    "type": "m.login.userowned",
+    "token": "<jwtoken>",
+    "session": "<session ID>"
+  }
+
+A client should have received a challenge via a prior request. The challenge is 
+contained in the token together with information about the user-owned identity.
+
+The homeserver verifies whether the user indeed controls the identity and 
+builds a username from it.
 
 Email-based (identity server)
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
